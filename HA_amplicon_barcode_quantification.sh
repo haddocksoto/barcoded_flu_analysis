@@ -35,7 +35,7 @@ cd $path
 #specify path to reference and path to merged fastq_files
 HA_ref="../references/bcCA07_HA_NNN_amplicon.fasta" 
 
-#Use BBMAP to map our reads to our custom reference amplicon sequence
+#Use BBMAP to map the reads to our custom reference amplicon sequence
 
 bbmap.sh ref=$HA_ref
 
@@ -48,7 +48,7 @@ outu=${sample}_unmapped.sam pairedonly=t printunmappedcount=t
 done
 
 ####################################################################################
-#We will obtain an average insert size when merging reads 1 and 2. That number will be used to trim all reads using REFORMAT.sh
+# We will obtain the average insert size when merging reads 1 and 2. That number will be used to trim all reads using REFORMAT.sh
 
 for file in */*_mapped*; 
 do
@@ -119,7 +119,7 @@ samtools fastq ${sample} > ${sample}_temp.fastq
     done
 done
 
-#Change all reads into 5' to 3'
+#Change all reads into 5' to 3' direction
 
 for file in */*processed_temp.fastq; 
 do
@@ -145,7 +145,7 @@ seqtk seq -a ${sample} > ${sample}.fasta
     done
 done
 
-#rRemove special characters such as > and +
+# Remove special characters such as '>' and '+'
 
 for file in */*processed_5_to_3_temp.fasta;
 do
@@ -159,12 +159,15 @@ done
 ######################################################################################################
 ## Using 'sed' to extract region containing our barcodes based on previously known barcode locations##
 ######################################################################################################
+
+# For this particular barcoded amplicon for HA, the barcode sequence is located in nucleotides 154-163
+
 for file in */*processed_5_to_3_temp.fasta;
 do
 sample=${file%%.processed_5_to_3_temp.fasta}
 echo ${sample}
-sed 's/^[A-Z]\{154\}//' ${sample} > ${sample}_left_154.fasta #for this amplicon, we first remove the first 154 nucleotides
-sed 's/.\{63\}$//' ${sample}_left_154.fasta > ${sample}_barcodes_temp.fasta #we then remove the last 63 nucleotides, resulting in the 10 nucleotide barcode sequence
+sed 's/^[A-Z]\{154\}//' ${sample} > ${sample}_left_154.fasta #for this amplicon, we first remove the first 153 nucleotides
+sed 's/.\{63\}$//' ${sample}_left_154.fasta > ${sample}_barcodes_temp.fasta #we then remove the nucleotides downstream of the 10 nt barcode
     for f in */*_temp.fasta_barcodes_temp.fasta; 
     do 
     mv "$f" "${f%_temp.fasta_barcodes_temp.fasta}_barcodes_temp.fasta" 
