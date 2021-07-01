@@ -1,4 +1,3 @@
-%%bash
 
 #generate the appropiate directories
 
