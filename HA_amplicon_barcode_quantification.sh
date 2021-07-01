@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 ####################################################################################
 #### FASTQ files for reads 1 and 2 should be in a directory called "fastq_files" ###
 ####################################################################################
@@ -47,7 +48,7 @@ outu=${sample}_unmapped.sam pairedonly=t printunmappedcount=t
 done
 
 ####################################################################################
-#We will obtain an average insert size when merginf reads 1 and 2. That number will be used to trim all reads using REFORMAT.sh
+#We will obtain an average insert size when merging reads 1 and 2. That number will be used to trim all reads using REFORMAT.sh
 
 for file in */*_mapped*; 
 do
