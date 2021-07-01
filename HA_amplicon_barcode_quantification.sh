@@ -1,3 +1,4 @@
+#!/bin/sh
 
 #generate the appropiate directories
 
