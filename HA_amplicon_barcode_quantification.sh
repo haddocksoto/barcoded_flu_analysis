@@ -1,6 +1,8 @@
 #!/bin/sh
 
-#generate the appropiate directories
+#FASTQ files for reads 1 and 2 should be in a directory called "fastq_files"
+
+#First we generate the appropiate directories where all the data will be stored
 
 mkdir data_output 
 
@@ -14,9 +16,9 @@ for reads in *_R1.fastq.gz;
 do
 sample=${reads%%_R1.fastq.gz}
 mkdir data_output/${sample} #create one subdirectory for each sample
-bbmerge.sh in1=${sample}_R1.fastq.gz in2=${sample}_R2.fastq.gz \
+bbmerge.sh in1=${sample}_R1.fastq.gz in2=${sample}_R2.fastq.gz \    #use bbmerge to merge reads 1 and 2
 out=../data_output/${sample}/${sample}.fastq
-done
+done #output for our bcflu HA amplicons gives an average insert size of 227 nucleotides
 
 
 #MAPPING TO REFERENCE FASTA FILE
