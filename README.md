@@ -1,2 +1,3 @@
 # bcflu_protocols
-Protocols used for WGS and amplicon sequencing of barcoded influenza A samples
+This repositiory contains the protocols used for whole gene segments and target amplicon library prep and sequencing of barcoded influenza A samples used by Amato, et al. 2021 (doi: _________)
+
