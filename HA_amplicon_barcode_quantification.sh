@@ -1,12 +1,16 @@
 #!/bin/sh
 
-#FASTQ files for reads 1 and 2 should be in a directory called "fastq_files"
+####################################################################################
+#### FASTQ files for reads 1 and 2 should be in a directory called "fastq_files" ###
+####################################################################################
 
-#First we generate the appropiate directories where all the data will be stored
+
+#First we generate the appropiate directory where all the data will be stored
 
 mkdir data_output 
 
-#merging paired end reads
+####################################################################################
+#Using BBMERGE to merge Read 1 and Read 2
 
 path_with_reads='fastq_files/' #provide the directory where all of the R1 and R2 FASTQ files are located
 
@@ -20,17 +24,17 @@ bbmerge.sh in1=${sample}_R1.fastq.gz in2=${sample}_R2.fastq.gz \    #use bbmerge
 out=../data_output/${sample}/${sample}.fastq
 done #output for our bcflu HA amplicons gives an average insert size of 227 nucleotides
 
-
-#MAPPING TO REFERENCE FASTA FILE
-
+####################################################################################
 path='../data_output/'
 cd $path
-#now we are working on the data_output directory, each containinig a 
-#subdirectory for each sample
+#now we are working on the data_output directory, each containinig a subdirectory for each sample
+
+####################################################################################
 
 #specify path to reference and path to merged fastq_files
-HA_ref="../references/bcCA07_HA_NNN_amplicon.fasta"
- 
+HA_ref="../references/bcCA07_HA_NNN_amplicon.fasta" 
+
+#Use BBMAP to map our reads to our custom reference amplicon sequence
 
 bbmap.sh ref=$HA_ref
 
@@ -42,8 +46,8 @@ bbmap.sh in=${sample}.fastq outm=${sample}_mapped.sam -Xmx20g \
 outu=${sample}_unmapped.sam pairedonly=t printunmappedcount=t
 done
 
-
-#TRIMMING READS TO AVERAGE INSERT SIZE OBTAINED WHEN PAIRING
+####################################################################################
+#We will obtain an average insert size when merginf reads 1 and 2. That number will be used to trim all reads using REFORMAT.sh
 
 for file in */*_mapped*; 
 do
@@ -56,9 +60,10 @@ reformat.sh in=${sample} out=${sample}_trimmed.sam minlength=227 maxlength=227 o
     done
 done
 
+####################################################################################
+#Aligning, sorting and indexing our reads using SAMTOOLS
 
-#ALIGNING WITH SAMTOOLS
-
+#align
 for file in */*_trimmed*; 
 do
 sample=${file%%._trimmed.sam}
@@ -73,8 +78,7 @@ ${sample}
 done
 
 
-#SORTING WITH SAMTOOLS
-
+#sort
 for file in */*_aligned*; 
 do
 sample=${file%%._aligned.bam}
@@ -88,8 +92,8 @@ ${sample}
     done
 done
 
-#INDEXING WITH SAMTOOLS
 
+#index
 for file in */*_sorted*; 
 do
 sample=${file%%._sorted.bam}
@@ -97,9 +101,11 @@ echo ${sample}
 samtools index ${sample}
 done
 
-########### GENERATING FASTQ FILES USING ALIGNED BAM FILES GENERATED ABOVE ##########
+####################################################################################
+################ Generating a TXT file containinig list of barocdes ################
+####################################################################################
 
-#CREATE FASTQ
+#Use SAMTOOLS to generate a fastq file with our aligned reads
 
 for file in */*_sorted.bam; 
 do
@@ -112,7 +118,7 @@ samtools fastq ${sample} > ${sample}_temp.fastq
     done
 done
 
-#READS INTO 5-3 DIRECTION
+#Change all reads into 5' to 3'
 
 for file in */*processed_temp.fastq; 
 do
@@ -125,7 +131,7 @@ reformat.sh in=${sample} out=${sample}_5_to_3_temp.fastq rcomp
     done
 done
 
-#GENERATING FASTA FILE WITH ALL OF THE READS SO THAT WE CAN EXTRACT BARCODE REGION
+#Extract FASTA file with all of the aligned reads
 
 for file in */*processed_5_to_3_temp.fastq; 
 do
@@ -138,7 +144,7 @@ seqtk seq -a ${sample} > ${sample}.fasta
     done
 done
 
-#removing special characters
+#rRemove special characters such as > and +
 
 for file in */*processed_5_to_3_temp.fasta;
 do
@@ -148,14 +154,16 @@ sed -i '' '/>/d' ${sample}
 sed -i '' '/+/d' ${sample}
 done
 
-#EXTRACTING BARCODES FROM HEMAGGLUTININ (HA) READS ONLY
 
+######################################################################################################
+## Using 'sed' to extract region containing our barcodes based on previously known barcode locations##
+######################################################################################################
 for file in */*processed_5_to_3_temp.fasta;
 do
 sample=${file%%.processed_5_to_3_temp.fasta}
 echo ${sample}
-sed 's/^[A-Z]\{154\}//' ${sample} > ${sample}_left_154.fasta
-sed 's/.\{63\}$//' ${sample}_left_154.fasta > ${sample}_barcodes_temp.fasta
+sed 's/^[A-Z]\{154\}//' ${sample} > ${sample}_left_154.fasta #for this amplicon, we first remove the first 154 nucleotides
+sed 's/.\{63\}$//' ${sample}_left_154.fasta > ${sample}_barcodes_temp.fasta #we then remove the last 63 nucleotides, resulting in the 10 nucleotide barcode sequence
     for f in */*_temp.fasta_barcodes_temp.fasta; 
     do 
     mv "$f" "${f%_temp.fasta_barcodes_temp.fasta}_barcodes_temp.fasta" 
@@ -167,7 +175,7 @@ sed 's/.\{63\}$//' ${sample}_left_154.fasta > ${sample}_barcodes_temp.fasta
 done
 
 
-#Clenaing reads to extract only the reads with 10 nucleotides (barcodes)
+#Clenaing reads to extract only the reads with exactly 10 nucleotides 
 
 for file in */*_barcodes_temp.fasta;
 do
@@ -183,4 +191,5 @@ grep -x '.\{10,10\}' ${sample} > ${sample}_clean.txt
     mv "$f" "${f%barcodes_temp.fasta_clean.txt}_barcodes_clean.txt" 
     done
 done
-#output: txt file with all of our barcodes as a single column.
+
+#Final output: txt file with all of our barcodes as a single column.
