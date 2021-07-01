@@ -6,12 +6,12 @@
 ####################################################################################
 
 
-#First we generate the appropiate directory where all the data will be stored
+#First we generate the appropiate directory where all the data output will be stored
 
 mkdir data_output 
 
 ####################################################################################
-#Using BBMERGE to merge Read 1 and Read 2
+#We use BBMERGE to merge Read 1 and Read 2
 
 path_with_reads='fastq_files/' #provide the directory where all of the R1 and R2 FASTQ files are located
 
