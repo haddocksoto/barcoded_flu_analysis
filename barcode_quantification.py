@@ -22,12 +22,13 @@ for file in Path(folder).glob('*/*barcodes_clean.txt'):
     df=df["barcodes"].value_counts().rename_axis('barcodes').reset_index(name='read_count')
     df.to_csv(file.with_suffix('.csv'), index = False)
 
-#I left frequencies out because I need to update them later after clustering
-
 
 #Preparing each barcode list for clustering
 
+#We use the UMI-Tools adjacency clustering methods (doi: 10.1101/gr.209601.116; Smith, et al. 2017)
+
 clusterer = UMIClusterer(cluster_method="adjacency")
+
 
 folder='data_output/'
 
@@ -65,3 +66,4 @@ for file in Path(folder).glob('*/*barcodes_clean.csv'):
     clusters_final.to_csv(file.with_suffix('.csv'), index = False)
     
 
+#Output will be a csv file with clustered barcodes, read counts and relative frequencies
