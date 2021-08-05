@@ -33,7 +33,7 @@ cd $path
 ####################################################################################
 
 #specify path to reference and path to merged fastq_files
-HA_ref="../references/bcCA07_HA_NNN_amplicon.fasta" 
+HA_ref="PATH/TO/REFERENCE/fasta_file.fa"
 
 #Use BBMAP to map the reads to our custom reference amplicon sequence
 
