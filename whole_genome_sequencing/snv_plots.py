@@ -99,3 +99,6 @@ plt.axhline(y = 10, color = 'black', linestyle = 'dashed', alpha=0.1)
 #saving the figures
 plt.savefig('SNV_plot_skewed.png', dpi=300, bbox_inches='tight')
 plt.savefig('SNV_plot_skewed.pdf', dpi=300, bbox_inches='tight') 
+
+
+#end
