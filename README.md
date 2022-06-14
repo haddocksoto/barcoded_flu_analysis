@@ -20,4 +20,4 @@ The generation of barcodes and barcode frequencies from paired end fastq files (
 
 To cite this work, please use:
 
-*#Amato KA, Haddock LA, Braun KM, Meliopoulos V, Livingston B, Honce R, Schaack GA, Boehm E, Higgins CA, Barry GL, Koelle K, Schultz-Cherry S, Friedrich TC, Mehle A. 2022. Influenza A virus undergoes compartmentalized replication in vivo dominated by stochastic bottlenecks. Nature Communications 13:3416.*#
+*Amato KA, Haddock LA, Braun KM, Meliopoulos V, Livingston B, Honce R, Schaack GA, Boehm E, Higgins CA, Barry GL, Koelle K, Schultz-Cherry S, Friedrich TC, Mehle A. 2022. Influenza A virus undergoes compartmentalized replication in vivo dominated by stochastic bottlenecks. Nature Communications 13:3416.*
