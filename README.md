@@ -1,7 +1,7 @@
-Barcoded Flu Analysis
+## Barcoded Flu Analysis
 ---------------------------------------------------------------
 
-## [Influenza A virus undergoes compartmentalized replication in vivo dominated by stochastic bottlenecks](https://rdcu.be/cPDuv).
+### [Influenza A virus undergoes compartmentalized replication in vivo dominated by stochastic bottlenecks](https://rdcu.be/cPDuv).
 Amato KA, Haddock LA, Braun KM, Meliopoulos V, Livingston B, Honce R, Schaack GA, Boehm E, Higgins CA, Barry GL, Koelle K, Schultz-Cherry S, Friedrich TC, Mehle A. 
 
 ---------------------------------------------------------------
